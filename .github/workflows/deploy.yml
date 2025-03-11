@@ -57,8 +57,6 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            rm -rf /web/vitrine-adal/frontend
-            mv /web/vitrine-adal/dist /web/vitrine-adal/frontend
             sudo chown -R www-data:www-data /web/vitrine-adal/frontend
             sudo chmod -R 755 /web/vitrine-adal/frontend
 
