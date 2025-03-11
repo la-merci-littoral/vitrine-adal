@@ -1,85 +1,79 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import '@fontsource/lexend';
+// import Logo from '@/assets/logo.svg?url'
+import Logo from '@/assets/placeholder_rdle.png'
+import isMobile from 'mobile-device-detect'
+import MobileView from './views/MobileView.vue';
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <main v-if="!isMobile.isMobile">
+    <div id="header-wrapper">
+      <header>
+        <img :src="Logo" alt="Logo de l'association">
+        <h1>Association des Amis du Littoral</h1>
+      </header>
     </div>
-  </header>
-
-  <RouterView />
+    <div id="main-wrapper">
+      <RouterView />
+    </div>
+  </main>
+  <MobileView v-else />
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+  main {
+    height: 100%;
+    width: 100%;
+    background-color: #82cdff;
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+    display: grid;
+    grid-template-columns: 0.4fr 0.7fr;
+    justify-content: center;
+    align-items: center;
+  }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+  #header-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #31749e;
+    border-right: 2px solid #1d338f;
+  }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
   header {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 25px;
+    background-color: #31749e;
+    color: #fff;
+    max-width: 90%;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  header img {
+    max-width: 75%;
   }
 
-  header .wrapper {
+  header h1 {
+    font-family: 'Lexend', sans-serif;
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 4rem;
+  }
+
+  #main-wrapper {
+    width: 100%;
+    height: 100%;
     display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
+  
 </style>

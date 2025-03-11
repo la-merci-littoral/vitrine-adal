@@ -1,0 +1,74 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production-ionos
+    steps:
+    
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 
+
+      - name: Install node modules
+        run: npm install
+
+      - name: Build
+        run: NODE_ENV=production npm run build
+
+      - name: Transfer Frontend to VPS
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          target: /web/vitrine-adal/
+          source: frontend/dist/*
+          overwrite: true
+          strip_components: 1
+
+      - name: Transfer Nginx Config to VPS
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          target: /etc/nginx/sites-available/
+          source: nginx.conf
+          overwrite: true
+      
+      - name: Reload Frontend on VPS
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            rm -rf /web/vitrine-adal/frontend
+            mv /web/vitrine-adal/dist /web/vitrine-adal/frontend
+            sudo chown -R www-data:www-data /web/vitrine-adal/frontend
+            sudo chmod -R 755 /web/vitrine-adal/frontend
+
+      - name: Reload Nginx on VPS
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            mv /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-available/vitrine-adal.conf
+            ln -sf /etc/nginx/sites-available/vitrine-adal.conf /etc/nginx/sites-enabled/vitrine-adal.conf
+            nginx -s reload
