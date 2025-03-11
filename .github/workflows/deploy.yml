@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_PASSWORD }}
           target: /web/vitrine-adal/
-          source: /dist/*
+          source: dist/*
           overwrite: true
           strip_components: 1
 
