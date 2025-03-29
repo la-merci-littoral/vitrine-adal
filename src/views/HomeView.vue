@@ -10,7 +10,8 @@ import '@fontsource/orienta';
     <h2>Raccourcis</h2>
     <div id="links">
       <a href="https://adhesion.amis-du-littoral.fr"><button>Adhésion à l'association</button></a>
-      <a href="https://inscription.amis-du-littoral.fr"><button>Inscription aux évènements</button></a>
+      <!-- <a href="https://inscription.amis-du-littoral.fr" di><button>Inscription aux évènements</button></a> -->
+      <a href="#" di><button disabled>Inscription aux évènements</button></a>
     </div>
   </div>
 </template>
@@ -65,5 +66,11 @@ import '@fontsource/orienta';
     transition: background-color ease .15s;
     cursor: pointer;
   }
+
+  #links button:disabled {
+    background-color: #404549;
+    cursor: not-allowed;
+  }
+  
 
 </style>
